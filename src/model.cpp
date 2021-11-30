@@ -20,10 +20,11 @@
 
 #include "model.h"
 
-Model::Model(int n, const std::shared_ptr<Shader> &shader) :
+Model::Model(int n, const std::shared_ptr<Shader> &shader, const std::shared_ptr<Texture> &texture) :
 	m_vertices(n+1),
 	m_indices(n * COORDS_COUNT),
-	m_shader(shader)
+	m_shader(shader),
+	m_texture(texture)
 {
 	assert(n > 2);
 	assert(shader.get());
@@ -33,15 +34,18 @@ Model::Model(int n, const std::shared_ptr<Shader> &shader) :
 	float rad_iter = whole_circle / n;
 	m_vertices[0] = {
 		{0., 0., 0.},
-		{0., 0., 0.}
+		{0., 0., 0.},
+		{0.5, 0.5}
 	};
 	for(int i = 0; i < n; rad += rad_iter, i++)
 	{
 		float temp = i % 2 ? 1. : 0.;
 		m_vertices[i+1] = {
 			{sin(rad), cos(rad), 0.},
-			{temp, temp, temp}
+			{temp, temp, temp},
+			{i==1||i==2, i<2}
 		};
+		std::cout << (i==1||i==2) << " " << (i<2) << std::endl;
 		m_indices[i*COORDS_COUNT] = 0;
 		m_indices[i*COORDS_COUNT+1] = i == n-1 ? 1 : i+2;
 		m_indices[i*COORDS_COUNT+2] = i+1;
@@ -64,6 +68,9 @@ Model::Model(int n, const std::shared_ptr<Shader> &shader) :
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::vec3));
 	glEnableVertexAttribArray(1);
 
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(2*sizeof(glm::vec3)));
+	glEnableVertexAttribArray(2);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -83,6 +90,7 @@ void Model::draw()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 
 	m_shader->use();
+	m_texture->use();
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, m_indices.size() * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 

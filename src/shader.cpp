@@ -15,6 +15,7 @@
 #include <glm/glm.hpp>
 
 #include "shader.h"
+#include "util.h"
 
 namespace {
 	std::string read_file(const std::string &path)
@@ -154,16 +155,5 @@ bool Shader::check_status(GLuint object, GLuint status, const char *msg, const c
 		error_msg(msg, static_cast<char*>(info_log), path);
 	}
 	return success;
-}
-
-void Shader::error_msg(const char *msg, const char *extra, const char *path)
-{
-	std::cerr << "ERROR: ";
-	if(path)
-		 std::cerr << "in file \"" << path << "\", ";
-	std::cerr << msg;
-	if(extra)
-		std::cerr << ", extra info: " << *extra;
-	std::cerr << std::endl;
 }
 

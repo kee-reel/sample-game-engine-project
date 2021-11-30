@@ -12,6 +12,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "util.h"
 #include "model.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -33,7 +34,7 @@ int main( void )
 
 	window = glfwCreateWindow( 500, 500, "SampleOGL", NULL, NULL);
 	if( window == NULL ){
-		std::cerr << "Failed to open GLFW window." << std::endl;
+		error_msg("Failed to init GLFW window.");
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
@@ -41,16 +42,18 @@ int main( void )
 
 	glewExperimental = true;
 	if (glewInit() != GLEW_OK) {
-		std::cerr << "Failed to open GLEW." << std::endl;
+		error_msg("Failed to init GLEW.");
 		glfwTerminate();
 		return -1;
 	}
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-	glClearColor(0.0f, 0.7f, 0.8f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+	std::string texture_path = "res/land.bmp";
+	std::shared_ptr<Texture> texture(new Texture(texture_path));
 	std::shared_ptr<Shader> shader(new Shader({"shaders/Sample.vert", "shaders/Sample.frag"}));
-	Model poly(26, shader);
+	Model poly(4, shader, texture);
 
 	std::chrono::duration<double, std::milli> frame_span(1000. / 60.);
 	do

@@ -22,6 +22,7 @@ include_directories(
 	external/glfw/include/
 	external/glew/include/
 	external/glm/
+	external/stb/
 )
 
 add_definitions(
@@ -30,19 +31,23 @@ add_definitions(
 	-DTW_NO_DIRECT3D
 	-DGLEW_STATIC
 	-D_CRT_SECURE_NO_WARNINGS
+	# Required for STB to work
+	-DSTB_IMAGE_IMPLEMENTATION
 )
 
 set( HEADERS
 	src/model.h
 	src/shader.h
+	src/texture.h
+	src/util.h
 )
 
 set( SOURCES
 	src/main.cpp
-	src/model.h
 	src/model.cpp
-	src/shader.h
 	src/shader.cpp
+	src/texture.cpp
+	src/util.cpp
 )
 
 add_executable( ${PROJECT_NAME} ${HEADERS} ${SOURCES} )

@@ -1,5 +1,6 @@
 #include "shader.h"
 #include "texture.h"
+#include "transform.h"
 
 class Model {
 	struct Vertex {
@@ -13,6 +14,7 @@ public:
 	void draw();
 
 private:
+	Transform m_transform;
 	int COORDS_COUNT = 3;
 	std::vector<Vertex> m_vertices;
 	std::vector<GLuint> m_indices;

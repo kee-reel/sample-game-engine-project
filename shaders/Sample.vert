@@ -5,14 +5,18 @@ layout (location = 2) in vec2 aTex;
 
 out vec3 vertColor;
 out vec2 texCoord;
+out float pulse;
 
 uniform float time;
 
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
 void main()
 {
-	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-	//float x = aPos.x*aPos.x + aPos.y*aPos.y;
-	//x = x*x - sin(time);
-	//vertColor = vec4((1f - aCol.x) * x, aCol.y * x - cos(time), sin(time/2f) - aCol.z * x, 1.0f);
-	texCoord = aTex;
+	gl_Position = projection * view * model * vec4(aPos, 1.0);
+	vertColor = aCol;
+	texCoord = aTex - sin(time/10.);
+	pulse = cos(time);
 }

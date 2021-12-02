@@ -39,7 +39,9 @@ set( HEADERS
 	src/model.h
 	src/shader.h
 	src/texture.h
+	src/transform.h
 	src/util.h
+	src/includes.h
 )
 
 set( SOURCES
@@ -47,12 +49,13 @@ set( SOURCES
 	src/model.cpp
 	src/shader.cpp
 	src/texture.cpp
+	src/transform.cpp
 	src/util.cpp
 )
 
 add_executable( ${PROJECT_NAME} ${HEADERS} ${SOURCES} )
 target_link_libraries( ${PROJECT_NAME}
 	glfw
-	GLEW
+	glew
 )
 

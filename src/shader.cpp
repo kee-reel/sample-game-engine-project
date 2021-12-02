@@ -1,20 +1,9 @@
-#include <iostream>
-#include <cstdlib>
-#include <cmath>
-
-#include <vector>
-#include <map>
-
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <memory>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-
 #include "shader.h"
+
+#include <glm/gtc/type_ptr.hpp>
+
+#include "includes.h"
+
 #include "util.h"
 
 namespace {
@@ -64,17 +53,33 @@ void Shader::use()
 
 void Shader::reload()
 {
-	reset();
 	load();
+}
+
+bool Shader::set_uint(const std::string &name, GLuint value)
+{
+	GLuint location;
+	if(!get_location(name, location))
+		return false;
+	glUniform1i(location, value);
+	return true;
+}
+
+bool Shader::set_mat4(const std::string &name, const glm::mat4 &mat)
+{
+	GLuint location;
+	if(!get_location(name, location))
+		return false;
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+	return true;
 }
 
 void Shader::reset()
 {
-	if(m_ok)
-	{
-		glDeleteProgram(m_program);
-		m_program = 0;
-	}
+	if(!m_ok)
+		return;
+	glDeleteProgram(m_program);
+	m_program = 0;
 	m_ok = false;
 }
 
@@ -155,5 +160,15 @@ bool Shader::check_status(GLuint object, GLuint status, const char *msg, const c
 		error_msg(msg, static_cast<char*>(info_log), path);
 	}
 	return success;
+}
+
+bool Shader::get_location(const std::string &name, GLuint &location)
+{
+	if(!m_ok)
+		return false;
+	location = glGetUniformLocation(m_program, name.c_str());
+	if(location == GL_INVALID_VALUE || location == GL_INVALID_OPERATION)
+		return false;
+	return true;
 }
 

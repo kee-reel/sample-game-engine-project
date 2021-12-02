@@ -15,15 +15,23 @@
 #include "util.h"
 #include "model.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+void error_callback(int error, const char* description)
+{
+    fprintf(stderr, "Error: %s\n", description);
+}
+
 
 int main( void )
 {
 	GLFWwindow* window;
 	if( !glfwInit() )
 	{
-		fprintf( stderr, "Failed to initialize GLFW\n" );
-		getchar();
+		error_msg("Failed to initialize GLFW.");
 		return -1;
 	}
 
@@ -31,6 +39,8 @@ int main( void )
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	glfwSetErrorCallback(error_callback);
 
 	window = glfwCreateWindow( 500, 500, "SampleOGL", NULL, NULL);
 	if( window == NULL ){
@@ -49,9 +59,9 @@ int main( void )
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
 
-	std::string texture_path = "res/land.bmp";
-	std::shared_ptr<Texture> texture(new Texture(texture_path));
+	std::shared_ptr<Texture> texture(new Texture({"res/water.jpeg", "res/stars.jpeg"}));
 	std::shared_ptr<Shader> shader(new Shader({"shaders/Sample.vert", "shaders/Sample.frag"}));
 	Model poly(4, shader, texture);
 
@@ -60,7 +70,7 @@ int main( void )
 	{
 		std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if(glfwGetKey(window, GLFW_KEY_R ) == GLFW_PRESS)
 		{
@@ -81,7 +91,3 @@ int main( void )
 	return 0;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}

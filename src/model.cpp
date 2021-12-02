@@ -1,22 +1,4 @@
-#include <iostream>
-#include <cstdlib>
-#include <cmath>
-#include <cassert>
-
-#include <chrono>
-#include <thread>
-
-#include <vector>
-#include <map>
-
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <memory>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
+#include "includes.h"
 
 #include "model.h"
 
@@ -37,15 +19,15 @@ Model::Model(int n, const std::shared_ptr<Shader> &shader, const std::shared_ptr
 		{0., 0., 0.},
 		{0.5, 0.5}
 	};
+	float shift = -1.;
 	for(int i = 0; i < n; rad += rad_iter, i++)
 	{
 		float temp = i % 2 ? 1. : 0.;
 		m_vertices[i+1] = {
-			{sin(rad), cos(rad), 0.},
+			{cos(rad), sin(rad), shift},
 			{temp, temp, temp},
 			{i==1||i==2, i<2}
 		};
-		std::cout << (i==1||i==2) << " " << (i<2) << std::endl;
 		m_indices[i*COORDS_COUNT] = 0;
 		m_indices[i*COORDS_COUNT+1] = i == n-1 ? 1 : i+2;
 		m_indices[i*COORDS_COUNT+2] = i+1;
@@ -90,7 +72,9 @@ void Model::draw()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 
 	m_shader->use();
-	m_texture->use();
+	m_texture->use(m_shader);
+	m_transform.set_rot(glm::vec3(0., (float)glfwGetTime()/10, 0.));
+	m_transform.use(m_shader);
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, m_indices.size() * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 

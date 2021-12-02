@@ -1,18 +1,20 @@
+#include "shader.h"
+
 class Texture
 {
 public:
-	Texture(const std::string &path);
+	Texture(const std::vector<std::string> &paths);
 	~Texture();
 	void reload();
-	void use();
+	void use(std::shared_ptr<Shader> shader);
 
 private:
 	void reset();
 	void load();
 
 private:
-	std::string m_path;
+	std::vector<std::string> m_paths;
 	bool m_ok;
-	GLuint m_texture;
+	std::vector<GLuint> m_textures;
 };
 

@@ -2,37 +2,48 @@
 
 #include "model.h"
 
+
 Model::Model(int n, const std::shared_ptr<Shader> &shader, const std::shared_ptr<Texture> &texture) :
-	m_vertices(n+1),
-	m_indices(n * COORDS_COUNT),
+	m_vertices(),
+	m_indices(),
 	m_shader(shader),
 	m_texture(texture)
 {
 	assert(n > 2);
 	assert(shader.get());
-	float pi = 3.14159265;
-	float rad = 0;
-	float whole_circle = 360. * pi / 180.;
-	float rad_iter = whole_circle / n;
-	m_vertices[0] = {
-		{0., 0., 0.},
-		{0., 0., 0.},
-		{0.5, 0.5}
-	};
-	float shift = -1.;
-	for(int i = 0; i < n; rad += rad_iter, i++)
-	{
-		float temp = i % 2 ? 1. : 0.;
-		m_vertices[i+1] = {
-			{cos(rad), sin(rad), shift},
-			{temp, temp, temp},
-			{i==1||i==2, i<2}
-		};
-		m_indices[i*COORDS_COUNT] = 0;
-		m_indices[i*COORDS_COUNT+1] = i == n-1 ? 1 : i+2;
-		m_indices[i*COORDS_COUNT+2] = i+1;
-	}
-	
+
+	const float TAU = 6.2831853071;
+	const float PI    = 3.14159265359;
+	unsigned int xSegments = 30;
+	unsigned int ySegments = 30;
+	for (unsigned int y = 0; y <= ySegments; ++y)
+        {
+            for (unsigned int x = 0; x <= xSegments; ++x)
+            {
+                float xSegment = (float)x / (float)xSegments;
+                float ySegment = (float)y / (float)ySegments;
+                float xPos = std::cos(xSegment * TAU) * std::sin(ySegment * PI); // TAU is 2PI
+                float yPos = std::cos(ySegment * PI);
+                float zPos = std::sin(xSegment * TAU) * std::sin(ySegment * PI);
+
+                m_vertices.push_back({
+			{xPos, yPos, zPos},
+			{xPos, yPos, zPos},
+			{xSegment, ySegment}
+		});
+		m_indices.push_back({
+			(y + 1) * (xSegments + 1) + x,
+			y * (xSegments + 1) + x,
+			y * (xSegments + 1) + x + 1
+		});
+		m_indices.push_back({
+			(y + 1) * (xSegments + 1) + x,
+			y * (xSegments + 1) + x + 1,
+			(y + 1) * (xSegments + 1) + x + 1
+		});
+	    }
+        }
+
 	glGenVertexArrays(1, &m_VAO);
 	glBindVertexArray(m_VAO);
 	
@@ -42,7 +53,7 @@ Model::Model(int n, const std::shared_ptr<Shader> &shader, const std::shared_ptr
 
 	glGenBuffers(1, &m_EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(GLuint), m_indices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(Index), m_indices.data(), GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -65,7 +76,7 @@ Model::~Model()
 	glDeleteBuffers(1, &m_VBO);
 }
 
-void Model::draw()
+void Model::draw(const glm::mat4 &view)
 {
 	glBindVertexArray(m_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -73,12 +84,16 @@ void Model::draw()
 
 	m_shader->use();
 	m_texture->use(m_shader);
-	m_transform.set_rot(glm::vec3(0., (float)glfwGetTime()/10, 0.));
-	m_transform.use(m_shader);
+	m_transform.use(m_shader, view);
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, m_indices.size() * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+}
+
+void Model::reload()
+{
+	m_shader->reload();
 }

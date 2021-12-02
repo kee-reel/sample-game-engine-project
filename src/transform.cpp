@@ -34,10 +34,10 @@ void Transform::set_scale(glm::vec3 scale)
 	recalc();
 }
 
-void Transform::use(std::shared_ptr<Shader> shader)
+void Transform::use(std::shared_ptr<Shader> shader, const glm::mat4 &view)
 {
 	shader->set_mat4("model", m_model);
-	shader->set_mat4("view", m_view);
+	shader->set_mat4("view", view);
 	shader->set_mat4("projection", m_projection);
 }
 

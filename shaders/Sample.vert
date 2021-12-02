@@ -17,6 +17,6 @@ void main()
 {
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
 	vertColor = aCol;
-	texCoord = aTex - sin(time/10.);
-	pulse = cos(time);
+	texCoord = aTex;
+	pulse = cos(time/10.);
 }

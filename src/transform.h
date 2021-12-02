@@ -8,7 +8,7 @@ public:
 	void set_pos(glm::vec3 pos);
 	void set_rot(glm::vec3 rot);
 	void set_scale(glm::vec3 scale);
-	void use(std::shared_ptr<Shader> shader);
+	void use(std::shared_ptr<Shader> shader, const glm::mat4 &view);
 
 private:
 	void recalc();

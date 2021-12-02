@@ -17,12 +17,13 @@ if( CMAKE_BINARY_DIR MATCHES " " )
 	message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 
-add_subdirectory (external)
+add_subdirectory (libs)
 include_directories(
-	external/glfw/include/
-	external/glew/include/
-	external/glm/
-	external/stb/
+	libs/glfw-3.3.5/include/
+	libs/glew-2.1.0/include/
+	libs/glm-0.9.8/
+	libs/stb/
+	libs/assimp-5.1.2/include/
 )
 
 add_definitions(
@@ -36,20 +37,24 @@ add_definitions(
 )
 
 set( HEADERS
+	src/application.h
 	src/model.h
 	src/shader.h
 	src/texture.h
 	src/transform.h
+	src/camera.h
 	src/util.h
 	src/includes.h
 )
 
 set( SOURCES
 	src/main.cpp
+	src/application.cpp
 	src/model.cpp
 	src/shader.cpp
 	src/texture.cpp
 	src/transform.cpp
+	src/camera.cpp
 	src/util.cpp
 )
 

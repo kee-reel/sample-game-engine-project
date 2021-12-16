@@ -10,6 +10,7 @@ public:
 	virtual ~Shader();
 	void reload();
 	void use();
+	bool set_float(const std::string &name, float value);
 	bool set_uint(const std::string &name, GLuint value);
 	bool set_mat4(const std::string &name, const glm::mat4 &mat);
 	bool set_vec3(const std::string &name, const glm::vec3 &vec);

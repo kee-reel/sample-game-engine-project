@@ -62,7 +62,7 @@ bool Application::init(int width, int height)
 		return false;
 	}
 
-	toggle_fullscreen(true);
+	toggle_fullscreen(false);
 	glfwSetInputMode(m_window, GLFW_STICKY_KEYS, GL_TRUE);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -136,11 +136,15 @@ std::shared_ptr<IModel> Application::add_model(const std::vector<std::string> &s
 void Application::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-	Application::instance()->m_width = width;
-	Application::instance()->m_height = height;
 	if(Application::instance()->m_camera)
 	{
 		Application::instance()->m_camera->update_aspect(width, height);
+	}
+	auto monitor = glfwGetPrimaryMonitor();
+	if(!monitor)
+	{
+		Application::instance()->m_width = width;
+		Application::instance()->m_height = height;
 	}
 }
 
@@ -195,9 +199,11 @@ void Application::handle_controls()
 void Application::toggle_fullscreen(bool enabled)
 {
 	toggle_cursor(!enabled);
-	glfwSetWindowMonitor(m_window, enabled ? glfwGetPrimaryMonitor() : nullptr, 0, 0, 
-			glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
-			glfwGetVideoMode(glfwGetPrimaryMonitor())->height, GLFW_DONT_CARE);
+	auto monitor = glfwGetPrimaryMonitor();
+	auto mode = glfwGetVideoMode(monitor);
+	glfwSetWindowMonitor(m_window, enabled ? monitor : nullptr, 0, 0, 
+			enabled ? mode->width : m_width,
+			enabled ? mode->height : m_height, GLFW_DONT_CARE);
 }
 
 void Application::toggle_cursor(bool enabled)

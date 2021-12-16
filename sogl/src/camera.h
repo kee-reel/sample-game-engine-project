@@ -9,6 +9,7 @@ class Camera
 public:
 	Camera(int width, int height);
 	const glm::mat4 &get_view();
+	const glm::vec3 &get_pos();
 	void move(glm::vec3 move);
 	void mouse(double pos_x, double pos_y);
 	void use(std::shared_ptr<Shader> shader);

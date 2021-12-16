@@ -82,9 +82,17 @@ void Model::draw(const std::shared_ptr<Camera> &camera)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 
 	m_shader->use();
-	m_shader->set_vec3("ambient", glm::vec3(1.f, 1.f, 1.f));
-	m_shader->set_vec3("lightPosition", glm::vec3(0., 100., 0.));
-	m_shader->set_vec3("lightColor", glm::vec3(1., 1., 1.));
+	m_shader->set_vec3("material.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
+	m_shader->set_vec3("material.diffuse", glm::vec3(1.f, 1.f, 1.f));
+	m_shader->set_vec3("material.specular", glm::vec3(1.f, 1.f, 1.f));
+	m_shader->set_float("material.shininess", 16.f);
+
+	m_shader->set_vec3("light.position", glm::vec3(100.f, 0.f, 0.f));
+	m_shader->set_vec3("light.ambient", glm::vec3(.1f, .1f, .1f));
+	m_shader->set_vec3("light.diffuse", glm::vec3(0.6f, 0.6f, 0.6f));
+	m_shader->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+	m_shader->set_vec3("viewPosition", camera->get_pos());
 	camera->use(m_shader);
 	m_texture->use(m_shader);
 	m_transform.use(m_shader, camera->get_view());

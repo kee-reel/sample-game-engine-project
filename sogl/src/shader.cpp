@@ -56,6 +56,15 @@ void Shader::reload()
 	load();
 }
 
+bool Shader::set_float(const std::string &name, float value)
+{
+	GLuint location;
+	if(!get_location(name, location))
+		return false;
+	glUniform1f(location, value);
+	return true;
+}
+
 bool Shader::set_uint(const std::string &name, GLuint value)
 {
 	GLuint location;

@@ -41,14 +41,16 @@ void Texture::use(std::shared_ptr<Shader> shader)
 {
 	if(!m_ok)
 		return;
-	static std::vector<std::string> number_to_name = {
-		"texture0", "texture1", "texture2"};
-	for(int i = 0; i < m_textures.size(); i++)
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_textures[0]);
+	shader->set_uint("material.diffuse", 0);
+	if(m_textures.size() >= 2)
 	{
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, m_textures[i]);
-		shader->set_uint(number_to_name[i], i);
+		glActiveTexture(GL_TEXTURE0 + 1);
+		glBindTexture(GL_TEXTURE_2D, m_textures[1]);
+		shader->set_uint("material.specular", 1);
 	}
+
 }
 
 void Texture::reset()

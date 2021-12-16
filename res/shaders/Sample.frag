@@ -5,16 +5,40 @@ in vec3 pos;
 in vec3 norm;
 in vec2 tex;
 
-uniform vec3 ambient;
-uniform vec3 lightPos;
-uniform vec3 lightColor;
-uniform sampler2D texture0;
+struct Material {
+    sampler2D diffuse;
+    sampler2D specular;
+    float shininess;
+}; 
+  
+uniform Material material;
+
+struct Light {
+    vec3 position;
+  
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+uniform Light light;
+
+uniform vec3 viewPosition;
 
 void main()
 {
-	vec3 lightDir = normalize(lightPos - pos);
-	vec3 diffuse = max(dot(norm, lightDir), 0.) * lightColor;
-	vec3 resLightColor = diffuse;//ambient + diffuse;
-	vec4 texColor = texture(texture0, tex);
-	FragColor = vec4(texColor.xyz * resLightColor, texColor.z);
+	vec3 lightDir = normalize(light.position - pos);
+
+	vec3 ambient = light.ambient * texture(material.diffuse, tex).xyz;
+
+	float diff = max(dot(norm, lightDir), 0.);
+	vec3 diffuse = light.diffuse * diff * texture(material.diffuse, tex).xyz;
+
+	vec3 reflectionDir = reflect(-lightDir, norm);
+	vec3 viewDir = normalize(viewPosition - pos);
+	float spec = pow(max(dot(viewDir, reflectionDir), 0.0), material.shininess);
+	vec3 specular = light.specular * spec * texture(material.specular, tex).zzz;
+
+	vec3 result = ambient + diffuse + specular;
+	FragColor = vec4(result, 1.0f);
 }

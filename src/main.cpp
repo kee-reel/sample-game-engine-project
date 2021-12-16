@@ -21,7 +21,7 @@ int main( void )
 	}
 	auto earth = app->add_model(
 			{"res/shaders/Sample.vert", "res/shaders/Sample.frag"}, 
-			{"res/earth.jpeg"});
+			{"res/earth.jpeg", "res/earth.jpeg"});
 	earth->get_transform()->set_pos(0., 0., -3.);
 
 	float y_rot = 0.f, rot_step = -0.001f;

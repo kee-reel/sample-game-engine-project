@@ -16,6 +16,11 @@ Camera::Camera(int width, int height) :
 	recalc();
 }
 
+const glm::vec3 &Camera::get_pos()
+{
+	return m_pos;
+}
+
 const glm::mat4 &Camera::get_view()
 {
 	return m_view;

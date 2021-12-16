@@ -74,6 +74,15 @@ bool Shader::set_mat4(const std::string &name, const glm::mat4 &mat)
 	return true;
 }
 
+bool Shader::set_vec3(const std::string &name, const glm::vec3 &vec)
+{
+	GLuint location;
+	if(!get_location(name, location))
+		return false;
+	glUniform3fv(location, 1, glm::value_ptr(vec));
+	return true;
+}
+
 void Shader::reset()
 {
 	if(!m_ok)
@@ -152,12 +161,25 @@ void Shader::delete_shaders(std::vector<GLuint> &shaders)
 bool Shader::check_status(GLuint object, GLuint status, const char *msg, const char *path)
 {
 	int success;
-	char info_log[512];
 	glGetShaderiv(object, status, &success);
 	if(!success)
 	{
-		glGetShaderInfoLog(object, 512, NULL, info_log);
-		error_msg(msg, static_cast<char*>(info_log), path);
+		int len;
+		glGetShaderiv(object, GL_INFO_LOG_LENGTH, &len);
+		std::vector<char> info_log(len);
+		switch(status)
+		{
+		case GL_COMPILE_STATUS:
+			glGetShaderInfoLog(object, len, NULL, info_log.data());
+			std::cout << info_log.data() << std::endl;
+			break;
+		case GL_LINK_STATUS:
+			glGetProgramInfoLog(object, len, NULL, info_log.data());
+			break;
+		default:
+			assert(false);
+		}
+		error_msg(msg, info_log.data(), path);
 	}
 	return success;
 }
@@ -171,4 +193,3 @@ bool Shader::get_location(const std::string &name, GLuint &location)
 		return false;
 	return true;
 }
-

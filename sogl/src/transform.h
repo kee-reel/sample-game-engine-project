@@ -1,7 +1,14 @@
 #include "shader.h"
 
-class Transform
+#include "sogl.h"
+
+class Transform : public SOGL::ITransform
 {
+public:
+	void set_pos(float x, float y, float z) override;
+	void set_rot(float x, float y, float z) override;
+	void set_scale(float x, float y, float z) override;
+
 public:
 	Transform();
 	~Transform();
@@ -16,7 +23,6 @@ private:
 private:
 	glm::mat4 m_model;
 	glm::mat4 m_view;
-	glm::mat4 m_projection;
 
 	glm::vec3 m_pos;
 	glm::vec3 m_rot;

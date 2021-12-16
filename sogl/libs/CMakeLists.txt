@@ -2,7 +2,7 @@ add_definitions(
 	-DTW_STATIC
 	-DTW_NO_LIB_PRAGMA
 	-DTW_NO_DIRECT3D
-	-DGLEW_STATIC
+	-DGLEW_BUILD
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
@@ -36,7 +36,7 @@ set( GLEW_SOURCE
 	glew-2.1.0/src/glew.c
 )
 
-add_library( glew STATIC
+add_library( glew SHARED
 	${GLEW_SOURCE}
 )
 

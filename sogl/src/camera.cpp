@@ -4,7 +4,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera() :
+Camera::Camera(int width, int height) :
 	m_pos(glm::vec3(0., 0., 0.)),
 	m_front(glm::vec3(0., 0., -1.)),
 	m_up(glm::vec3(0., 1., 0.)),
@@ -12,6 +12,7 @@ Camera::Camera() :
 	m_yaw(-90.),
 	m_pitch(0.)
 {
+	update_aspect(width, height);
 	recalc();
 }
 
@@ -59,6 +60,16 @@ void Camera::mouse(double xpos, double ypos)
 	direction.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
 	m_front = glm::normalize(direction);
 	recalc();
+}
+
+void Camera::update_aspect(int width, int height)
+{
+	m_projection = glm::perspective(glm::radians(45.), (double)width/height, 0.1, 1000.);
+}
+
+void Camera::use(std::shared_ptr<Shader> shader)
+{
+	shader->set_mat4("projection", m_projection);
 }
 
 void Camera::recalc()

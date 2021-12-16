@@ -3,13 +3,12 @@
 #include "model.h"
 
 
-Model::Model(int n, const std::shared_ptr<Shader> &shader, const std::shared_ptr<Texture> &texture) :
+Model::Model(const std::shared_ptr<Shader> &shader, const std::shared_ptr<Texture> &texture) :
 	m_vertices(),
 	m_indices(),
 	m_shader(shader),
 	m_texture(texture)
 {
-	assert(n > 2);
 	assert(shader.get());
 
 	const float TAU = 6.2831853071;
@@ -76,16 +75,19 @@ Model::~Model()
 	glDeleteBuffers(1, &m_VBO);
 }
 
-void Model::draw(const glm::mat4 &view)
+void Model::draw(const std::shared_ptr<Camera> &camera)
 {
 	glBindVertexArray(m_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 
 	m_shader->use();
+	m_shader->set_vec3("ambient", glm::vec3(1.f, 1.f, 1.f));
+	m_shader->set_vec3("lightPosition", glm::vec3(0., 100., 0.));
+	m_shader->set_vec3("lightColor", glm::vec3(1., 1., 1.));
+	camera->use(m_shader);
 	m_texture->use(m_shader);
-	m_transform.use(m_shader, view);
-	glBindVertexArray(m_VAO);
+	m_transform.use(m_shader, camera->get_view());
 	glDrawElements(GL_TRIANGLES, m_indices.size() * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

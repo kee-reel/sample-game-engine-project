@@ -1,11 +1,13 @@
 # CMake entry point
 cmake_minimum_required (VERSION 3.16)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set( PROJECT_NAME SampleOGL )
 project( ${PROJECT_NAME} )
 
 find_package( OpenGL REQUIRED )
-
 
 if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
     message( FATAL_ERROR "Please select another Build Directory ! (and give it a clever name, like bin_Visual2012_64bits/)" )
@@ -17,50 +19,25 @@ if( CMAKE_BINARY_DIR MATCHES " " )
 	message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 
-add_subdirectory (libs)
-include_directories(
-	libs/glfw-3.3.5/include/
-	libs/glew-2.1.0/include/
-	libs/glm-0.9.8/
-	libs/stb/
-	libs/assimp-5.1.2/include/
-)
-
 add_definitions(
 	-DTW_STATIC
 	-DTW_NO_LIB_PRAGMA
 	-DTW_NO_DIRECT3D
 	-DGLEW_STATIC
 	-D_CRT_SECURE_NO_WARNINGS
-	# Required for STB to work
-	-DSTB_IMAGE_IMPLEMENTATION
 )
 
-set( HEADERS
-	src/application.h
-	src/model.h
-	src/shader.h
-	src/texture.h
-	src/transform.h
-	src/camera.h
-	src/util.h
-	src/includes.h
-)
+add_subdirectory( sogl )
 
-set( SOURCES
+add_executable( ${PROJECT_NAME}
 	src/main.cpp
-	src/application.cpp
-	src/model.cpp
-	src/shader.cpp
-	src/texture.cpp
-	src/transform.cpp
-	src/camera.cpp
-	src/util.cpp
+	sogl/src/sogl.h
 )
 
-add_executable( ${PROJECT_NAME} ${HEADERS} ${SOURCES} )
-target_link_libraries( ${PROJECT_NAME}
-	glfw
-	glew
+target_link_libraries( ${PROJECT_NAME} 
+	sogl
 )
 
+include_directories(
+	sogl/src/
+)

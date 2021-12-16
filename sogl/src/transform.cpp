@@ -34,11 +34,25 @@ void Transform::set_scale(glm::vec3 scale)
 	recalc();
 }
 
+void Transform::set_pos(float x, float y, float z)
+{
+	set_pos(glm::vec3(x, y, z));
+}
+
+void Transform::set_rot(float x, float y, float z)
+{
+	set_rot(glm::vec3(x, y, z));
+}
+
+void Transform::set_scale(float x, float y, float z)
+{
+	set_scale(glm::vec3(x, y, z));
+}
+
 void Transform::use(std::shared_ptr<Shader> shader, const glm::mat4 &view)
 {
 	shader->set_mat4("model", m_model);
 	shader->set_mat4("view", view);
-	shader->set_mat4("projection", m_projection);
 }
 
 void Transform::recalc()
@@ -52,6 +66,4 @@ void Transform::recalc()
 
 	m_view = glm::mat4(1.);
 	m_view = glm::translate(m_view, glm::vec3(0., 0., -5.));
-
-	m_projection = glm::perspective(glm::radians(45.), 1., 0.1, 100.);
 }

@@ -1,8 +1,12 @@
 #include "shader.h"
 #include "texture.h"
 #include "transform.h"
+#include "camera.h"
 
-class Model {
+#include "sogl.h"
+
+class Model : public SOGL::IModel
+{
 	struct Vertex {
 		glm::vec3 pos;
 		glm::vec3 norm;
@@ -12,18 +16,19 @@ class Model {
 		GLuint indices[3];
 	};
 public:
-	Model(int n, const std::shared_ptr<Shader> &shader, const std::shared_ptr<Texture> &texture);
-	~Model();
-	void draw(const glm::mat4 &view);
-	inline Transform &get_transform()
+	virtual ~Model();
+	inline SOGL::ITransform *get_transform() override
 	{
-		return m_transform;
+		return &m_transform;
 	}
+
+public:
+	Model(const std::shared_ptr<Shader> &shader, const std::shared_ptr<Texture> &texture);
+	void draw(const std::shared_ptr<Camera> &camera);
 	void reload();
 
 private:
 	Transform m_transform;
-	int COORDS_COUNT = 3;
 	std::vector<Vertex> m_vertices;
 	std::vector<Index> m_indices;
 	GLuint m_VAO;

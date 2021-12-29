@@ -1,20 +1,24 @@
-#include "shader.h"
+#ifndef TEXTURE_H_
+#define TEXTURE_H_
 
-class Texture
+#include "shader.h"
+#include "component.h"
+
+class Texture : public Component
 {
 public:
-	Texture(const std::vector<std::string> &paths);
+	Texture(const std::string &path);
 	~Texture();
 	void reload();
-	void use(std::shared_ptr<Shader> shader);
+	void use(int num, std::string name, std::shared_ptr<Shader> shader);
 
 private:
 	void reset();
 	void load();
 
 private:
-	std::vector<std::string> m_paths;
 	bool m_ok;
-	std::vector<GLuint> m_textures;
+	std::string m_path;
+	GLuint m_texture;
 };
-
+#endif

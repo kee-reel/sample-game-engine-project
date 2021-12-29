@@ -1,16 +1,13 @@
 #include "includes.h"
 
-#include "model.h"
+#include "mesh.h"
 
 
-Model::Model(const std::shared_ptr<Shader> &shader, const std::shared_ptr<Texture> &texture) :
+Mesh::Mesh() :
+	Component(),
 	m_vertices(),
-	m_indices(),
-	m_shader(shader),
-	m_texture(texture)
+	m_indices()
 {
-	assert(shader.get());
-
 	const float TAU = 6.2831853071;
 	const float PI    = 3.14159265359;
 	unsigned int xSegments = 30;
@@ -68,34 +65,19 @@ Model::Model(const std::shared_ptr<Shader> &shader, const std::shared_ptr<Textur
 	glBindVertexArray(0);
 }
 
-Model::~Model()
+Mesh::~Mesh()
 {
 	glDeleteVertexArrays(1, &m_VAO);
 	glDeleteBuffers(1, &m_EBO);
 	glDeleteBuffers(1, &m_VBO);
 }
 
-void Model::draw(const std::shared_ptr<Camera> &camera)
+void Mesh::draw()
 {
 	glBindVertexArray(m_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 
-	m_shader->use();
-	m_shader->set_vec3("material.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
-	m_shader->set_vec3("material.diffuse", glm::vec3(1.f, 1.f, 1.f));
-	m_shader->set_vec3("material.specular", glm::vec3(1.f, 1.f, 1.f));
-	m_shader->set_float("material.shininess", 16.f);
-
-	m_shader->set_vec3("light.position", glm::vec3(100.f, 0.f, 0.f));
-	m_shader->set_vec3("light.ambient", glm::vec3(.1f, .1f, .1f));
-	m_shader->set_vec3("light.diffuse", glm::vec3(0.6f, 0.6f, 0.6f));
-	m_shader->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-
-	m_shader->set_vec3("viewPosition", camera->get_pos());
-	camera->use(m_shader);
-	m_texture->use(m_shader);
-	m_transform.use(m_shader, camera->get_view());
 	glDrawElements(GL_TRIANGLES, m_indices.size() * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -103,7 +85,6 @@ void Model::draw(const std::shared_ptr<Camera> &camera)
 	glBindVertexArray(0);
 }
 
-void Model::reload()
+void Mesh::reload()
 {
-	m_shader->reload();
 }

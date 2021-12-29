@@ -1,13 +1,17 @@
 #include "includes.h"
-#include "model.h"
+#include "resource_loader.h"
 #include "camera.h"
+#include "material.h"
+#include "mesh.h"
+#include "game_object.h"
 
 #include "sogl.h"
 
 namespace SOGL
 {
 
-typedef std::vector<std::string> string_vector;
+typedef std::map<std::shared_ptr<Mesh>, std::vector<std::shared_ptr<GameObject>>> mesh_to_go_t;
+typedef std::map<std::shared_ptr<Material>, mesh_to_go_t> material_to_mesh_t;
 
 class Application : public IApplication
 {
@@ -17,8 +21,7 @@ public:
 	bool init(int width, int height) override;
 	void fini() override;
 	bool draw() override;
-	std::shared_ptr<IModel> add_model(const std::vector<std::string> &shaders, 
-			const std::vector<std::string> &textures) override;
+	std::shared_ptr<IGameObject> add_game_object(const std::string &material_path) override;
 
 private:
 	static std::shared_ptr<Application> &instance();
@@ -42,9 +45,7 @@ private:
 	std::chrono::duration<float, std::milli> m_frame_duration, m_dt;
 
 	std::shared_ptr<Camera> m_camera;
-	std::vector<std::shared_ptr<Model>> m_models;
-	std::vector<std::pair<string_vector, std::shared_ptr<Shader>>> m_shaders;
-	std::vector<std::pair<string_vector, std::shared_ptr<Texture>>> m_textures;
+	material_to_mesh_t m_game_objects;
 };
 
 };

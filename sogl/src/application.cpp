@@ -83,8 +83,18 @@ bool Application::draw()
 
 	// Draw calls
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	for(const auto &model : m_models)
-		model->draw(m_camera);
+	for(auto material_to_mesh = m_game_objects.begin(); material_to_mesh != m_game_objects.end(); material_to_mesh++)
+	{
+		material_to_mesh->first->use(m_camera);
+		for(auto mesh_to_go = material_to_mesh->second.begin(); mesh_to_go != material_to_mesh->second.end(); mesh_to_go++)
+		{
+			for(auto &go : mesh_to_go->second)
+			{
+				material_to_mesh->first->use_model(go->transform.get_model());
+				mesh_to_go->first->draw();
+			}
+		}
+	}
 	glfwSwapBuffers(m_window);
 
 	// Sleep to sustain FPS
@@ -97,40 +107,14 @@ bool Application::draw()
 	return !m_is_quitting;
 }
 
-std::shared_ptr<IModel> Application::add_model(const std::vector<std::string> &shaders,
-		const std::vector<std::string> &textures)
+std::shared_ptr<IGameObject> Application::add_game_object(const std::string &material_path)
 {
-	std::shared_ptr<Texture> texture;
-	std::shared_ptr<Shader> shader;
-	for(const auto &iter : m_textures)
-	{
-		if(iter.first == textures)
-		{
-			texture = iter.second;
-			break;
-		}
-	}
-	if(!texture.get())
-	{
-		texture.reset(new Texture(textures));
-		m_textures.push_back(std::make_pair(textures, texture));
-	}
-	for(const auto &iter : m_shaders)
-	{
-		if(iter.first == shaders)
-		{
-			shader = iter.second;
-			break;
-		}
-	}
-	if(!shader.get())
-	{
-		shader.reset(new Shader(shaders));
-		m_shaders.push_back(std::make_pair(shaders, shader));
-	}
-	std::shared_ptr<Model> model(new Model(shader, texture));
-	m_models.push_back(model);
-	return model;
+	std::shared_ptr<Material> material = ResourceLoader::instance().get_material(material_path);
+	std::shared_ptr<Mesh> mesh = ResourceLoader::instance().get_mesh();
+	auto &mesh_to_go = m_game_objects[material];
+	auto &&go = std::shared_ptr<GameObject>(new GameObject());
+	mesh_to_go[mesh].push_back(go);
+	return go;
 }
 
 void Application::framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -178,8 +162,8 @@ void Application::handle_controls()
 
 	if(is_key_pressed(GLFW_KEY_R))
 	{
-		for(const auto &model : m_models)
-			model->reload();
+//		for(const auto &model : m_models)
+//			model->reload();
 	}
 	else if(is_key_pressed(GLFW_KEY_F))
 	{

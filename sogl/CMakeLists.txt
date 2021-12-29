@@ -40,9 +40,13 @@ add_definitions(
 set( HEADERS
 	src/sogl.h
 	src/application.h
-	src/model.h
+	src/resource_loader.h
+	src/component.h
+	src/game_object.h
+	src/mesh.h
 	src/shader.h
 	src/texture.h
+	src/material.h
 	src/transform.h
 	src/camera.h
 	src/util.h
@@ -51,9 +55,11 @@ set( HEADERS
 
 set( SOURCES
 	src/application.cpp
-	src/model.cpp
+	src/resource_loader.cpp
+	src/mesh.cpp
 	src/shader.cpp
 	src/texture.cpp
+	src/material.cpp
 	src/transform.cpp
 	src/camera.cpp
 	src/util.cpp

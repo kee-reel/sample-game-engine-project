@@ -1,0 +1,4 @@
+shader:vert=res/shaders/LightSource.vert
+shader:frag=res/shaders/LightSource.frag
+
+vec3:light.ambient=1.0 1.0 0.5

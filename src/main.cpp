@@ -1,13 +1,13 @@
-#include "sogl.h"
+#include "sge.h"
 
 int main( void )
 {
-	std::shared_ptr<SOGL::IApplication> app = SOGL::instance();
+	std::shared_ptr<sge::IApplication> app = sge::instance();
 
-	if(!app->init(500, 500))
+	if(!app->init(500, 500, "SGE"))
 		return 0;
 
-	std::vector<std::shared_ptr<SOGL::IGameObject>> stars;
+	std::vector<std::shared_ptr<sge::IGameObject>> stars;
 	for(int i = 0; i < 1000; i++)
 	{
 		auto star = app->add_game_object("res/star.mat");

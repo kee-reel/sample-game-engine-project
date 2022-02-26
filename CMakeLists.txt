@@ -4,7 +4,7 @@ cmake_minimum_required (VERSION 3.16)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set( PROJECT_NAME SampleOGL )
+set( PROJECT_NAME sample-game-engine-project )
 project( ${PROJECT_NAME} )
 
 find_package( OpenGL REQUIRED )
@@ -27,17 +27,17 @@ add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
-add_subdirectory( sogl )
+add_subdirectory( sample-game-engine )
 
 add_executable( ${PROJECT_NAME}
 	src/main.cpp
-	sogl/src/sogl.h
+	sample-game-engine/src/sge.h
 )
 
 target_link_libraries( ${PROJECT_NAME} 
-	sogl
+	sample-game-engine
 )
 
 include_directories(
-	sogl/src/
+	sample-game-engine/src/
 )

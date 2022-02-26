@@ -1,0 +1,3 @@
+[submodule "sample-game-engine"]
+	path = sample-game-engine
+	url = git@github.com:kee-reel/sample-game-engine.git

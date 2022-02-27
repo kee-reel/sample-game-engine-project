@@ -5,7 +5,3 @@ texture:material.diffuse=res/earth.jpg
 texture:material.specular=res/earth_specular.jpg
 texture:material.emission=res/earth_emission.jpeg
 float:material.shininess=16
-
-vec3:light.ambient=0.01 0.01 0.01
-vec3:light.diffuse=1 1 1
-vec3:light.specular=1 1 1

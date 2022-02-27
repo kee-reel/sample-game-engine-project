@@ -28,6 +28,7 @@ uniform vec3 viewPosition;
 
 void main()
 {
+    vec3 norm_ = normalize(norm);
 	vec3 lightDir = normalize(light.position - pos);
 
 	vec3 ambient = light.ambient * texture(material.diffuse, tex).xyz;
@@ -35,7 +36,7 @@ void main()
 	float diff = max(dot(norm, lightDir), 0.);
 	vec3 diffuse = light.diffuse * diff * texture(material.diffuse, tex).xyz;
 
-	vec3 reflectionDir = reflect(-lightDir, norm);
+	vec3 reflectionDir = reflect(-lightDir, norm_);
 	vec3 viewDir = normalize(viewPosition - pos);
 	float spec = pow(max(dot(viewDir, reflectionDir), 0.0), material.shininess);
 	vec3 specular = light.specular * spec * texture(material.specular, tex).xyz;

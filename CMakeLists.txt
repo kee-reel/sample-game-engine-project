@@ -40,4 +40,6 @@ target_link_libraries( ${PROJECT_NAME}
 
 include_directories(
 	sample-game-engine/src/
+	sample-game-engine/src/
+	sample-game-engine/libs/glm/
 )

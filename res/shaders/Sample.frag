@@ -32,8 +32,10 @@ uniform Light lights[MAX_LIGHTS_COUNT];
 
 uniform vec3 viewPosition;
 
-vec3 calc_light(Light light, vec3 lightDir, float diff, vec3 norm_)
+vec3 calc_light(Light light, vec3 lightDir, vec3 norm_)
 {
+    float diff = max(dot(norm_, lightDir), 0.);
+
 	vec3 ambient = light.ambient * texture(material.diffuse, tex).xyz;
 
 	vec3 diffuse = light.diffuse * diff * texture(material.diffuse, tex).xyz;
@@ -57,17 +59,18 @@ vec3 calc_light(Light light, vec3 lightDir, float diff, vec3 norm_)
 
 void main()
 {
-
     vec3 result = vec3(0.0f);
     float max_diff = 0;
+    float diff = 0;
+    vec3 norm_ = normalize(norm);
+    vec3 lightDir;
     for(int i = 0; i < MAX_LIGHTS_COUNT; i++)
     {
-        vec3 norm_ = normalize(norm);
-        vec3 lightDir = lights[i].position.w == 0.0f ? 
+        lightDir = lights[i].position.w == 0.0f ? 
             normalize(lights[i].position.xyz) : normalize(lights[i].position.xyz - pos);
-        float diff = max(dot(norm_, lightDir), 0.);
+        diff = max(dot(norm_, lightDir), 0.);
         max_diff = max(diff, max_diff);
-	    result += calc_light(lights[i], lightDir, diff, norm_);
+	    result += calc_light(lights[i], lightDir, norm_);
     }
 
 	vec3 emission_tex = texture(material.emission, tex).xyz;

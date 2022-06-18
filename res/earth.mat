@@ -1,7 +1,15 @@
-shader:vert=res/shaders/Sample.vert
-shader:frag=res/shaders/Sample.frag
+{
+    "shader": {
+        "vert": "res/shaders/Sample.vert",
+        "frag": "res/shaders/Sample.frag"
+    },
+    "texture": {
+        "material.diffuse": "res/earth.jpg",
+        "material.specular": "res/earth_specular.jpg",
+        "material.emission": "res/earth_emission.jpeg"
+    },
+    "float": {
+        "material.shininess": 16
+    }
+}
 
-texture:material.diffuse=res/earth.jpg
-texture:material.specular=res/earth_specular.jpg
-texture:material.emission=res/earth_emission.jpeg
-float:material.shininess=16

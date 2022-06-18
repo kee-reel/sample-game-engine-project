@@ -1,2 +1,2 @@
 #!/bin/bash
-./scripts/build.sh && gdb build/sample-game-engine-project
+./scripts/build.sh && gdb build/sample-game-engine-project $@

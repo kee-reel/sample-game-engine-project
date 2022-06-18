@@ -1,0 +1,13 @@
+{
+    "window": {
+        "title": "SGE",
+        "width": 800,
+        "height": 600
+    },
+    "objects": {
+        "earth": {
+            "material": "res/earth.mat",
+            "script": "res/earth.lua"
+        }
+    }
+}

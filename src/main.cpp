@@ -1,9 +1,13 @@
-#include <sge.h>
 #include <iostream>
-#include <cmath>
+#include <sge.h>
 
-int main( void )
+int main(int argc, char *argv[])
 {
-	return sge::instance()->init(500, 500, "SGE", "res/main.lua");
+    if(argc < 2)
+    {
+        std::cout << "No project config provided in command line arguments" << std::endl;
+        return 1;
+    }
+	return sge::init(argv[1]);
 }
 

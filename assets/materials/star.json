@@ -1,7 +1,7 @@
 {
     "shader": {
-        "vert": "res/shaders/LightSource.vert",
-        "frag": "res/shaders/LightSource.frag"
+        "vert": "shaders/LightSource.vert",
+        "frag": "shaders/LightSource.frag"
     },
     "vec3": {
         "light.ambient": [1.0, 1.0, 0.5]

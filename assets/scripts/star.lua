@@ -1,4 +1,4 @@
-grow_factor = 0.01
+grow_factor = 0.1
 function update()
     scale = self.transform:get_scale().x
     if scale <= 0.1 or scale >= 1 then

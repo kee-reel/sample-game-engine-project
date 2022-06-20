@@ -1,0 +1,15 @@
+{
+    "shader": {
+        "vert": "shaders/Sample.vert",
+        "frag": "shaders/Sample.frag"
+    },
+    "texture": {
+        "material.diffuse": "textures/earth.jpg",
+        "material.specular": "textures/earth_specular.jpg",
+        "material.emission": "textures/earth_emission.jpeg"
+    },
+    "float": {
+        "material.shininess": 16
+    }
+}
+

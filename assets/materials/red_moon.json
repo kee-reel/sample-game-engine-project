@@ -1,0 +1,12 @@
+{
+    "shader": {
+        "vert": "shaders/LightSource.vert",
+        "frag": "shaders/LightSource.frag"
+    },
+    "vec3": {
+        "light.ambient": [1, 0, 0]
+    },
+    "bool": {
+        "is_emitting": true
+    }
+}

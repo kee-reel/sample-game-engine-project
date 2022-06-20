@@ -2,7 +2,7 @@
 stars = {}
 for i = 1, 1001, 1
 do
-    star = app:add_game_object("res/star.mat", "res/star.lua", "")
+    star = app:add_game_object("materials/star.json", "scripts/star.lua", "")
     star.transform:set_pos(vec3:new(
         math.random(1000) - math.random(1000), 
         math.random(1000) - math.random(1000), 

@@ -1,0 +1,28 @@
+{
+    "assets_path": "assets/",
+    "window": {
+        "title": "SGE",
+        "width": 800,
+        "height": 600,
+        "clear_color": [0.0, 0.0, 0.0]
+    },
+    "objects": {
+        "earth": {
+            "material": "materials/earth.json",
+            "script": "scripts/earth.lua"
+        },
+        "sun": {
+            "material": "materials/star.json",
+            "light": "lights/directional.json",
+            "script": "scripts/sun.lua"
+        },
+        "stars": {
+            "script": "scripts/stars.lua"
+        },
+        "red_moon": {
+            "material": "materials/red_moon.json",
+            "light": "lights/point.json",
+            "script": "scripts/red_moon.lua"
+        }
+    }
+}

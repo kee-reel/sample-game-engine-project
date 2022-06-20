@@ -2,12 +2,26 @@
     "window": {
         "title": "SGE",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "clear_color": [0.0, 0.0, 0.0]
     },
     "objects": {
         "earth": {
             "material": "res/earth.mat",
             "script": "res/earth.lua"
+        },
+        "sun": {
+            "material": "res/star.mat",
+            "light": "res/sun_directional.mat",
+            "script": "res/sun.lua"
+        },
+        "stars": {
+            "script": "res/stars.lua"
+        },
+        "red_moon": {
+            "material": "res/red_moon.mat",
+            "light": "res/sun_point.mat",
+            "script": "res/red_moon.lua"
         }
     }
 }

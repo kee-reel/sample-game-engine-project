@@ -1,4 +1,10 @@
-vec3:ambient=0.01 0.01 0.01
-vec3:diffuse=1 1 1
-vec3:specular=1 1 1
-string:light_type=directional
+{
+    "vec3": {
+        "ambient": [0.01, 0.01, 0.01],
+        "diffuse": [1, 1, 1],
+        "specular": [1, 1, 1]
+    },
+    "string": {
+        "light_type": "directional"
+    }
+}

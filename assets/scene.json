@@ -9,20 +9,23 @@
     "objects": {
         "earth": {
             "material": "materials/earth.json",
-            "script": "scripts/earth.lua"
+            "script": "scripts/earth.lua",
+            "model": "models/sphere.fbx"
         },
         "sun": {
             "material": "materials/star.json",
             "light": "lights/directional.json",
-            "script": "scripts/sun.lua"
+            "script": "scripts/sun.lua",
+            "model": "models/cube.obj"
         },
         "stars": {
             "script": "scripts/stars.lua"
         },
-        "red_moon": {
+        "backpack": {
             "material": "materials/red_moon.json",
-            "light": "lights/point.json",
-            "script": "scripts/red_moon.lua"
+            "script": "scripts/red_moon.lua",
+            "model": "models/cube.obj",
+            "light": "lights/point.json"
         }
     }
 }

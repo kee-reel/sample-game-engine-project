@@ -1,7 +1,7 @@
 {
     "shader": {
-        "vert": "shaders/Sample.vert",
-        "frag": "shaders/Sample.frag"
+        "vert": "shaders/DiffSpecEmis.vert",
+        "frag": "shaders/DiffSpecEmis.frag"
     },
     "texture": {
         "material.diffuse": "textures/earth.jpg",
@@ -12,4 +12,3 @@
         "material.shininess": 16
     }
 }
-
